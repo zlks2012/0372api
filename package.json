@@ -1,8 +1,8 @@
 {
-  "name": "ai-website-clone-template",
-  "version": "0.6.1",
+  "name": "@zlks2012/0372api",
+  "version": "1.0.0",
   "private": true,
-  "description": "Clone any website into a clean, modern Next.js codebase using AI coding agents",
+  "description": "AI API Gateway - standalone Vue SPA frontend + Node.js backend",
   "author": "JCodesMore",
   "license": "MIT",
   "repository": {
