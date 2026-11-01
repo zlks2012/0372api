@@ -75,6 +75,7 @@ node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 80
 - 个人设置
 - 深色模式
 - 响应式布局（移动端适配）
+- 多语言支持（中文 / English，可扩展）
 
 ### 管理端 (/admin)
 
@@ -127,6 +128,47 @@ node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 80
 - API 路由权限校验（用户 / 管理员）
 - CORS 跨域配置
 - Next.js 中间件路由保护
+
+
+## 多语言支持 / Multi-Language Support
+
+内置国际化 (i18n) 系统，支持以下语言：
+
+| 语言 | 代码 | 语言文件 | 状态 |
+|------|------|---------|------|
+| 中文（简体） | `zh` | `index-C7DuMFIL.js` | ✅ 完整 |
+| English | `en` | `index-Bqdiag9l.js` | ✅ 完整 |
+
+### 切换语言
+
+用户可在页面右上角点击语言切换按钮，在中文和英文之间自由切换。语言偏好自动保存到浏览器 `localStorage`。
+
+### 添加新语言
+
+1. 复制现有语言文件作为模板：
+
+```bash
+cp public/sites/emooo/index-C7DuMFIL.js public/sites/emooo/index-<新语言代码>.js
+```
+
+2. 在 `public/index.html` 的 `__APP_CONFIG__` 中注册新语言
+3. 翻译 `index-<新语言代码>.js` 中的所有字符串键值对
+4. 系统自动检测浏览器语言并匹配
+
+### 支持的翻译范围
+
+所有 UI 界面文本均可翻译，包括：
+
+- 导航菜单、页面标题、按钮文字
+- 表单标签和占位符
+- 错误消息和成功提示
+- 邮件模板
+- 管理面板标签
+- 邮件通知模板
+
+### 已有翻译覆盖
+
+前端 Vue SPA 内置了完整的 i18n 框架（vue-i18n），翻译覆盖了全部 42 个管理页面和所有用户端页面的 UI 文本。新增语言只需提供翻译文件，无需修改任何代码逻辑。
 
 ## 配置说明
 
