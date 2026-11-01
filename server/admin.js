@@ -101,21 +101,34 @@ function handleAdmin(req, res, p, method) {
   }
 
   // === Groups ===
-  if (p === "/api/v1/admin/groups" && method === "GET") return list(res, db.groups);
-  if (p === "/api/v1/admin/groups/all" && method === "GET") return list(res, db.groups);
+  if (p === "/api/v1/admin/groups" && method === "GET") { const enriched = db.groups.map(g => ({ ...g, platform: g.platform || "openai", group_type: g.group_type || "api", access_type: g.access_type || "public", account_count: (db.channels || []).filter(c => c.group === g.name).length, usage_summary: { total_requests: 0, total_tokens: 0 } })); return list(res, enriched); }
+  if (p === "/api/v1/admin/groups/all" && method === "GET") { const enriched = db.groups.map(g => ({ ...g, platform: g.platform || "openai", group_type: g.group_type || "api", access_type: g.access_type || "public" })); return list(res, enriched); }
   if (p === "/api/v1/admin/groups" && method === "POST") {
     return readBody(req).then((body) => {
-      const group = { id: db.groups.length + 1, name: body.name, description: body.description || "", ratio: body.ratio || 1, models: body.models || [], status: body.status || "enabled" };
+      const group = { id: db.groups.length + 1, name: body.name, description: body.description || "", ratio: body.ratio || 1, models: body.models || [], status: body.status || "enabled", platform: body.platform || "openai", group_type: body.group_type || "api", access_type: body.access_type || "public", sort_order: db.groups.length + 1 };
       db.groups.push(group); save(db);
       return ok(res, group);
     });
+  }
+
+  // === Upstream Accounts ===
+  if (p === "/api/v1/admin/accounts" && method === "GET") {
+    const accounts = (db.channels || []).map(c => ({
+      id: c.id, name: c.name, platform: c.type || "openai",
+      base_url: c.base_url, api_key: c.api_key ? "***" : "",
+      models: c.models || [], group: c.group || "default",
+      status: c.status || "enabled", priority: c.priority || 0,
+      weight: c.weight || 1, account_type: c.type || "openai",
+      created_at: c.created_at
+    }));
+    return list(res, accounts);
   }
 
   // === Channels ===
   if (p === "/api/v1/admin/channels" && method === "GET") return list(res, db.channels);
   if (p === "/api/v1/admin/channels" && method === "POST") {
     return readBody(req).then((body) => {
-      const ch = { id: db.nextChannelId++, name: body.name, type: body.type || "openai", base_url: body.base_url, api_key: body.api_key, models: body.models || [], group: body.group, priority: body.priority || 0, weight: body.weight || 1, status: body.status || "enabled", created_at: new Date().toISOString() };
+      const ch = { id: db.nextChannelId++, name: body.name, type: body.type || "openai", platform: body.platform || body.type || "openai", base_url: body.base_url, api_key: body.api_key, models: body.models || [], group: body.group || "default", priority: body.priority || 0, weight: body.weight || 1, status: body.status || "enabled", created_at: new Date().toISOString() };
       db.channels.push(ch); save(db);
       return ok(res, ch);
     });
