@@ -13,8 +13,8 @@ function readBody(req) {
   });
 }
 
-function ok(res, data) { json(res, 200, data); }
-function list(res, items, total, page, pageSize) { json(res, 200, { items, total: total ?? items.length, page: page || 1, page_size: pageSize || 20, pages: Math.ceil((total ?? items.length) / (pageSize || 20)) }); }
+function ok(res, data) { json(res, 200, { code: 0, data, message: "success" }); }
+function list(res, items, total, page, pageSize) { json(res, 200, { code: 0, data: { items, total: total ?? items.length, page: page || 1, page_size: pageSize || 20, pages: Math.ceil((total ?? items.length) / (pageSize || 20)) }, message: "success" }); }
 
 function handleAdmin(req, res, p, method) {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -109,6 +109,14 @@ function handleAdmin(req, res, p, method) {
       db.groups.push(group); save(db);
       return ok(res, group);
     });
+  }
+
+  // === System ===
+  if (p === "/api/v1/admin/system/version" && method === "GET") {
+    return json(res, 200, { code: 0, data: { current_version: "1.0.0", latest_version: "1.0.0", has_update: false }, message: "success" });
+  }
+  if (p === "/api/v1/admin/system/check-updates" && method === "GET") {
+    return json(res, 200, { code: 0, data: { has_update: false }, message: "success" });
   }
 
   // === Upstream Accounts ===

@@ -51,6 +51,11 @@ const PUBLIC_SETTINGS = {
   },
 };
 
+function jsonWrapped(res, status, data) {
+  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" });
+  res.end(JSON.stringify({ code: 0, data, message: "success" }));
+}
+
 function json(res, status, data) {
   const body = JSON.stringify(data);
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" });
@@ -195,7 +200,7 @@ const server = http.createServer(async (req, res) => {
       const auth = requireAuth(req);
       if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
       const { user } = auth;
-      return json(res, 200, { code: 0, data: { id: user.id, email: user.email, username: user.username, role: user.role, balance: user.balance, quota: user.quota, used_quota: user.used_quota, group: user.group, status: user.status, created_at: user.created_at } });
+      return jsonWrapped(res, 200, { id: user.id, email: user.email, username: user.username, role: user.role, balance: user.balance, quota: user.quota, used_quota: user.used_quota, group: user.group, status: user.status, created_at: user.created_at })
     }
 
     if (p === "/api/v1/auth/logout" && method === "POST") {
