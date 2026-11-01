@@ -29,7 +29,7 @@ node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 80
 ## 系统架构
 
 ```
-0372api.top (122.43.226.96)
+0372api.top → 127.0.0.1
     ├── port 80   → Next.js 前端 (静态 SPA + API 反向代理)
     └── port 3000 → Node.js API 后端
                       └── server/data.json (JSON 文件数据库)
