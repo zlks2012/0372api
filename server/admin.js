@@ -289,6 +289,41 @@ function handleAdmin(req, res, p, method) {
   // === Compliance ===
   if (p === "/api/v1/admin/compliance" && method === "GET") return ok(res, { required: false });
 
+  // === User Concurrency ===
+  if (p === "/api/v1/admin/ops/user-concurrency" && method === "GET") {
+    const users = db.users.map(u => ({
+      id: u.id, username: u.username, email: u.email,
+      concurrency: u.concurrency || 0,
+      max_concurrency: u.max_concurrency || 5,
+      status: u.status || "active"
+    }));
+    return list(res, users);
+  }
+
+  // === Ingress Whitelist ===
+  if (!db.whitelist) db.whitelist = [];
+  if (p === "/api/v1/admin/ingress-whitelist/current-ip" && method === "GET") {
+    return ok(res, { ip: "127.0.0.1" });
+  }
+  if (p === "/api/v1/admin/ingress-whitelist" && method === "GET") {
+    return list(res, db.whitelist);
+  }
+  if (p === "/api/v1/admin/ingress-whitelist" && method === "POST") {
+    return readBody(req).then(body => {
+      if (!body.ip) return json(res, 400, { code: 400, message: "ip required" });
+      const entry = { id: db.whitelist.length + 1, ip: body.ip, note: body.note || "", created_at: new Date().toISOString() };
+      db.whitelist.push(entry); save(db);
+      return ok(res, entry);
+    });
+  }
+  const wlMatch = p.match(/^\/api\/v1\/admin\/ingress-whitelist\/(\d+)$/);
+  if (wlMatch && method === "DELETE") {
+    const idx = db.whitelist.findIndex(w => w.id === parseInt(wlMatch[1]));
+    if (idx < 0) return json(res, 404, { code: 404, message: "not found" });
+    db.whitelist.splice(idx, 1); save(db);
+    return ok(res, { deleted: true });
+  }
+
   // === Generic empty list for remaining GET endpoints ===
   if (method === "GET") return list(res, []);
   if (method === "POST" || method === "PUT") return ok(res, {});
