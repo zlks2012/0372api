@@ -14,7 +14,7 @@ function readBody(req) {
 }
 
 function ok(res, data) { json(res, 200, { code: 0, data, message: "success" }); }
-function list(res, items, total) { ok(res, { items, total: total ?? items.length }); }
+function list(res, items, total, page, pageSize) { ok(res, { items, total: total ?? items.length, page: page || 1, page_size: pageSize || 20, total_pages: Math.ceil((total ?? items.length) / (pageSize || 20)) }); }
 
 function handleAdmin(req, res, p, method) {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -49,7 +49,12 @@ function handleAdmin(req, res, p, method) {
     const users = db.users.map((u) => ({
       id: u.id, email: u.email, username: u.username, role: u.role,
       balance: u.balance, quota: u.quota, used_quota: u.used_quota,
-      group: u.group, status: u.status, created_at: u.created_at,
+      group: u.group || "default", status: u.status, created_at: u.created_at,
+      api_key_count: (db.apiKeys || []).filter(k => k.user_id === u.id).length,
+      concurrency: 0, max_concurrency: 5,
+      last_login_at: u.last_login_at || u.created_at,
+      is_admin: u.role === "admin",
+      display_name: u.username,
     }));
     return list(res, users, users.length);
   }

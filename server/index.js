@@ -346,6 +346,35 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { code: 0, message: "success", data: { amount: rc.amount, new_balance: auth.user.balance } });
     }
 
+    // === Support Tickets ===
+    if (p === "/api/v1/support" && method === "GET") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      return json(res, 200, { code: 0, data: { tickets: [] }, message: "success" });
+    }
+
+    // === Redeem History ===
+    if (p === "/api/v1/redeem" && method === "GET") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      const db = load();
+      const myRedemptions = (db.redeemCodes || []).filter(r => r.used_by === auth.user.id);
+      return json(res, 200, { code: 0, data: { codes: myRedemptions, history: myRedemptions }, message: "success" });
+    }
+
+    // === Available Channels with proper format ===
+    if (p === "/api/v1/channels/available" && method === "GET") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      const db = load();
+      const avail = db.channels.filter((c) => c.status === "enabled").map(c => ({
+        id: c.id, name: c.name, type: c.type, models: c.models || [],
+        group_id: c.group || "default", group_name: c.group || "default",
+        priority: c.priority, weight: c.weight, status: c.status
+      }));
+      return json(res, 200, { code: 0, data: avail });
+    }
+
     // === Placeholder for other authenticated endpoints (known routes) ===
     if (p.startsWith("/api/v1/") && !p.startsWith("/api/v1/settings") && !p.startsWith("/api/v1/auth") && !p.startsWith("/api/v1/setup")) {
       const auth = requireAuth(req);
