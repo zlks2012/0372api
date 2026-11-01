@@ -320,10 +320,11 @@ const server = http.createServer(async (req, res) => {
       const rates = db.groups.map(g => ({
         group_name: g.name,
         ratio: g.ratio,
-        models: g.models,
-        description: g.description
+        models: g.models || [],
+        description: g.description || "",
+        platform: g.platform || "openai"
       }));
-      return json(res, 200, { code: 0, data: rates });
+      return json(res, 200, rates);
     }
 
     // === Redeem Code Usage ===
