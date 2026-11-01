@@ -1,0 +1,1 @@
+import{b as r,E as s,a as t}from"./vendor-vue-DDG2o-zM.js";function u(){const n=t(0);function o(e){(e.key===null||e.key==="auth_token"||e.key==="auth_user")&&n.value++}return r(()=>window.addEventListener("storage",o)),s(()=>window.removeEventListener("storage",o)),n}export{u};

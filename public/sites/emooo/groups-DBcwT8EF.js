@@ -1,0 +1,1 @@
+import{n as e}from"./index-CeyPfWaJ.js";async function r(a={}){const{data:t}=await e.get("/groups/available",a);return t}async function s(a={}){const{data:t}=await e.get("/groups/rates",a);return t||{}}const o={getAvailable:r,getUserGroupRates:s};export{o as u};

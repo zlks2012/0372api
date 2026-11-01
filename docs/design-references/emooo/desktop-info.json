@@ -1,0 +1,15 @@
+{
+  "url": "https://emooo.cc/home",
+  "title": "Home - EMOAI",
+  "height": 5904,
+  "text": "",
+  "links": [],
+  "buttons": [
+    ""
+  ],
+  "fonts": [
+    "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+    "\"Segoe UI Variable Display\", \"Segoe UI\", system-ui, -apple-system, \"PingFang SC\", \"HarmonyOS Sans SC\", \"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif"
+  ],
+  "bodyBg": "rgb(249, 250, 251)"
+}

@@ -1,0 +1,13 @@
+{
+  "height": 5904,
+  "text": "",
+  "sections": [],
+  "links": [],
+  "buttons": [
+    ""
+  ],
+  "rootVars": [
+    ":root { --tw-primary-50: 240 253 250; --tw-primary-100: 204 251 241; --tw-primary-200: 153 246 228; --tw-primary-300: 94 234 212; --tw-primary-400: 45 212 191; --tw-primary-500: 20 184 166; --tw-primary-600: 13 148 136; --tw-primary-700: 15 118 110; --tw-primary-800: 17 94 89; --tw-primary-900: 19 78 74; --tw-primary-950: 4 47 46; --tw-dark-50: 248 250 252; --tw-dark-100: 241 245 249; --tw-dark-200: 226 232 240; --tw-dark-300: 203 213 225; --tw-dark-400: 148 163 184; --tw-dark-500: 100 116 139; --tw-dark-600: 71 85 105; --tw-dark-700: 51 65 85; --tw-dark-800: 30 41 59; --tw-dark-900: 15 23 42; --tw-dark-950: 2 6 23; }",
+    ".dark { color-scheme: dark; }"
+  ]
+}

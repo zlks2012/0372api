@@ -1,154 +1,159 @@
-<div align="center">
+# 0372api.top - AI API Gateway
 
-# AI Website Cloner Template
+独立部署的 AI API 中转站前端 + 后端，运行在自己的服务器上。
 
-### Clone any website with one command
+## 项目简介
 
-Give your AI coding agent a URL and watch it recreate the website as a clean Next.js app.
+完整的 AI API Gateway 系统，包含 Vue SPA 前端（361 个资产文件）和 Node.js 后端 API 服务器。支持用户注册、登录、API 密钥管理、管理面板、渠道管理、公告系统等完整功能。
 
-**Best results with [Claude Code](https://docs.anthropic.com/en/docs/claude-code) + Opus 5.5. Also supports Codex, Cursor, and OpenCode.**
-
-[![Use this template](https://img.shields.io/badge/Use_this_template-Create_your_copy-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JCodesMore/ai-website-cloner-template/generate) [![Discord](https://img.shields.io/badge/Join_the_community-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/hrTSX5yTpB)
-
-[Quick Start](#quick-start) · [Watch Demo](#demo) · [Supported Platforms](#supported-platforms)
-
-<a href="https://github.com/JCodesMore/ai-website-cloner-template/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a> <a href="https://github.com/JCodesMore/ai-website-cloner-template"><img src="https://img.shields.io/github/stars/JCodesMore/ai-website-cloner-template?style=flat" alt="Stars" /></a> <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/JCodesMore/ai-website-cloner-template/badges/token-badge.json" alt="tokens" />
-
-  <a href="https://trendshift.io/repositories/24302?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-24302" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/24302" alt="JCodesMore%2Fai-website-cloner-template | Trendshift" width="250" height="55" /></a> <a href="https://www.star-history.com/jcodesmore/ai-website-cloner-template/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=JCodesMore/ai-website-cloner-template&amp;theme=dark" /><source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=JCodesMore/ai-website-cloner-template" /><img alt="Star History Global Rank" src="https://api.star-history.com/badge?repo=JCodesMore/ai-website-cloner-template" width="216" height="55" /></picture></a>
-
-</div>
-
----
-
-## Demo
-
-[![Watch the demo](docs/design-references/comparison.png)](https://youtu.be/O669pVZ_qr0)
-
-> Click the image above to watch the full demo on YouTube.
-
-## Quick Start
-
-### 1. Set up your project
-
-**Recommended: ask your agent.** Paste this into Codex, Claude Code, or your coding agent:
-
-```text
-Set up https://github.com/JCodesMore/ai-website-cloner-template
-as a standalone project in a new folder on my computer.
-Ask me where to put it. Clone the repository, remove its origin remote,
-install dependencies, and run npm run check. Leave it ready for me
-to clone a website.
-```
-
-**Or create your own GitHub repository:**
-
-[![Use this template](https://img.shields.io/badge/Use_this_template-Create_your_copy-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JCodesMore/ai-website-cloner-template/generate)
-
-Give it a name and click **Create repository**. Then give your agent the new repository's link and ask it to clone it onto your computer, install dependencies, and run `npm run check`.
-
-### 2. Clone a website
-
-Open the project in your agent with browser access enabled. In Claude Code or Cursor, run:
-
-```text
-/clone-website https://example.com
-```
-
-Replace the URL with the website you want to recreate. Once it's built, ask your agent for any changes you want.
-
-## Supported Platforms
-
-| Agent                                                         | Status                     |
-| ------------------------------------------------------------- | -------------------------- |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | **Recommended** — Opus 5.5 |
-| [Codex CLI](https://github.com/openai/codex)                  | Supported                  |
-| [OpenCode](https://opencode.ai/)                              | Supported                  |
-| [Cursor](https://cursor.com/)                                 | Supported                  |
-
-## Prerequisites
-
-- [Node.js](https://nodejs.org/) 24+
-- An AI coding agent (see [Supported Platforms](#supported-platforms))
-
-## Tech Stack
-
-- **Next.js 16** — App Router, React 19, TypeScript strict
-- **shadcn/ui** — Base UI primitives + Tailwind CSS v4
-- **Tailwind CSS v4** — oklch design tokens
-- **Lucide React** — default icons (replaced by extracted SVGs during cloning)
-
-## How It Works
-
-The `/clone-website` skill follows four steps:
-
-1. **Map** — map source URLs to local routes and preserve existing work.
-2. **Observe** — inspect desktop/mobile pages, extract real assets and fonts, and exercise alternate states.
-3. **Build** — implement editable components and working interactions; delegate independent sections when useful.
-4. **Compare** — review source and local pages at matched sizes/states, repair visible differences, and run the production check.
-
-Framer pages and animated sites have focused inspection guidance for responsive variants, media, sticky scenes, and scroll/time-driven motion. Direct HTTP or asset tools handle extraction where practical; browser comparisons establish appearance and behavior. Deliverables include route mappings, run instructions, comparison screenshots, and any remaining gaps.
-
-## Use Cases
-
-- **Platform migration** — rebuild a site you own from WordPress/Webflow/Squarespace into a modern Next.js codebase
-- **Lost source code** — your site is live but the repo is gone, the developer left, or the stack is legacy. Get the code back in a modern format
-- **Learning** — deconstruct how production sites achieve specific layouts, animations, and responsive behavior by working with real code
-
-## Not Intended For
-
-- **Phishing or impersonation** — this project must not be used for deceptive purposes, impersonation, or any activity that breaks the law.
-- **Passing off someone's design as your own** — logos, brand assets, and original copy belong to their owners.
-- **Violating terms of service** — some sites explicitly prohibit scraping or reproduction. Check first.
-
-## Project Structure
-
-```
-src/
-  app/              # Next.js routes
-  components/       # React components
-    ui/             # shadcn/ui primitives
-    sites/<site>/   # Source-specific components and extracted SVGs
-  lib/utils.ts      # cn() utility
-  types/            # TypeScript interfaces
-  hooks/            # Custom React hooks
-public/
-  sites/<site>/     # Source-specific images, fonts, videos, and other assets
-docs/
-  research/<site>/  # Page brief, asset map, and inspection evidence
-  design-references/ # Screenshots
-.agents/skills/
-  clone-website/    # Canonical skill and inspection reference
-.claude/commands/
-  clone-website.md  # Thin Claude Code bridge
-AGENTS.md           # Agent instructions (single source of truth)
-CLAUDE.md           # Claude Code config (imports AGENTS.md)
-```
-
-## Commands
+## 快速启动
 
 ```bash
-npm run dev    # Start dev server
-npm run build  # Production build
-npm run lint   # ESLint check
-npm run typecheck # TypeScript check
-npm run check  # Run lint + typecheck + build
+# 1. 构建前端
+node node_modules/next/dist/bin/next build
+node scripts/patch-edge-build-id.js
+
+# 2. 启动后端 API (端口 3000)
+node server/index.js
+
+# 3. 启动前端 (端口 80)
+node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 80
 ```
 
-### If using docker
+或使用一键启动脚本：
 
-```bash
-docker compose up app --build # build and run the app
-docker compose up dev --build # run the app in dev mode on port 3001
+```powershell
+.start.ps1
 ```
 
-## Agent Support
+## 系统架构
 
-The project keeps one portable Agent Skill at `.agents/skills/clone-website/`. Codex, Cursor, and OpenCode read it directly. Claude Code uses the small command bridge at `.claude/commands/clone-website.md` so `/clone-website` and its arguments continue to work without exposing a duplicate skill to the other agents.
+```
+0372api.top (122.43.226.96)
+    ├── port 80   → Next.js 前端 (静态 SPA + API 反向代理)
+    └── port 3000 → Node.js API 后端
+                      └── server/data.json (JSON 文件数据库)
+```
 
-## Star History
+## 目录结构
 
-![Star History Chart](docs/assets/star-history.png)
+```
+├── server/                    # Node.js API 后端
+│   ├── index.js               # 主服务器（用户认证、API 密钥、用量等）
+│   ├── admin.js               # 管理面板 API（225+ 端点）
+│   ├── db.js                  # JSON 数据库（密码哈希、令牌生成）
+│   └── data.json              # 数据存储文件
+├── public/
+│   ├── index.html             # SPA HTML 入口
+│   ├── favicon.ico            # 网站图标
+│   ├── fonts/                 # 字体文件（TTF）
+│   └── sites/emooo/           # 361 个 Vue SPA 资产
+│       ├── *.js               # JS chunk（懒加载模块）
+│       ├── *.css              # 样式文件
+│       └── *.ttf              # 字体
+├── src/
+│   ├── middleware.ts          # Next.js 中间件（SPA 路由回退）
+│   └── app/                   # Next.js App Router
+├── scripts/
+│   └── patch-edge-build-id.js # 构建后自动修补
+├── next.config.ts             # Next.js 配置（rewrites、代理）
+├── start.ps1                  # 一键启动脚本
+└── CLONE-README.md            # 克隆说明
+```
 
-## License
+## 功能列表
+
+### 用户端
+
+- 用户注册 / 登录（邮箱 + 密码）
+- API 密钥管理（创建、删除、查看）
+- 用量记录查看
+- 分组列表 / 可用渠道
+- 订阅管理
+- 充值系统
+- 兑换码
+- 个人设置
+- 深色模式
+- 响应式布局（移动端适配）
+
+### 管理端 (/admin)
+
+第一个注册的用户自动获得管理员权限。
+
+| 模块 | 功能 |
+|------|------|
+| 仪表盘 | 全站统计、实时数据 |
+| 用户管理 | CRUD、余额调整、角色、批量操作 |
+| 分组管理 | 模型分组、倍率、模型列表 |
+| 渠道管理 | 上游渠道、API 密钥、模型映射 |
+| 渠道监控 | 可用性探测、延迟 |
+| 公告管理 | 发布、编辑、删除公告 |
+| 兑换码 | 批量生成、导出、统计 |
+| 促销码 | 折扣码管理 |
+| 支付系统 | 支付渠道、套餐、订单 |
+| 运维监控 | 错误日志、延迟、吞吐 |
+| 系统设置 | SMTP、限流、Web 搜索 |
+| 审计日志 | 操作日志 |
+| 推广系统 | 推广者、邀请、返利 |
+
+## API 端点
+
+### 用户端 (/api/v1/)
+
+| 方法 | 路径 | 功能 |
+|------|------|------|
+| POST | /auth/register | 用户注册 |
+| POST | /auth/login | 用户登录 |
+| GET | /auth/me | 当前用户信息 |
+| POST | /auth/logout | 登出 |
+| GET | /settings/public | 站点公开配置 |
+| GET/POST | /keys | API 密钥列表 / 创建 |
+| DELETE | /keys/:id | 删除密钥 |
+| GET | /usage | 用量记录 |
+| GET | /groups/available | 可用分组 |
+| GET | /channels/available | 可用渠道 |
+| GET | /announcements | 公告列表 |
+| GET | /subscriptions | 订阅信息 |
+| GET | /user/network | 用户 IP 信息 |
+
+### 管理端 (/api/v1/admin/)
+
+225+ 个端点，覆盖用户、分组、渠道、财务、订单、运维、风控等全部管理功能。
+
+## 安全特性
+
+- 密码使用 PBKDF2 + 随机盐哈希存储
+- Bearer Token 会话认证
+- API 路由权限校验（用户 / 管理员）
+- CORS 跨域配置
+- Next.js 中间件路由保护
+
+## 配置说明
+
+### 域名解析
+
+```
+0372api.top → 122.43.226.96
+```
+
+### 防火墙
+
+确保以下端口开放：
+
+- 80 — HTTP 前端
+- 3000 — API 后端（仅内部，由 Next.js 代理）
+
+### 管理员账号
+
+第一个注册的用户自动成为管理员。
+
+## 技术栈
+
+- 前端: Vue 3 SPA (361 个文件) + Next.js 16 (App Router)
+- 后端: Node.js 原生 HTTP 服务器（零依赖）
+- 数据库: JSON 文件存储
+- 构建: Turbopack
+
+## 许可证
 
 MIT
