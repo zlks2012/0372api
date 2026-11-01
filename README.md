@@ -133,7 +133,7 @@ node node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port 80
 ### 域名解析
 
 ```
-0372api.top → 122.43.226.96
+0372api.top → 127.0.0.1
 ```
 
 ### 防火墙
