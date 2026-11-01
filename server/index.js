@@ -273,6 +273,34 @@ const server = http.createServer(async (req, res) => {
       return handleAdmin(req, res, p, method);
     }
 
+    // === Payment Config ===
+    if (p === "/api/v1/payment/config" && method === "GET") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      const db = load();
+      return json(res, 200, { code: 0, data: db.paymentConfig || { alipay_enabled: true, wxpay_enabled: true, currency: "CNY" } });
+    }
+
+    // === Membership Shop ===
+    if (p === "/api/v1/membership-shop" && method === "GET") {
+      const db = load();
+      return json(res, 200, { code: 0, data: db.plans || [] });
+    }
+
+    // === Groups Rates ===
+    if (p === "/api/v1/groups/rates" && method === "GET") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      const db = load();
+      const rates = db.groups.map(g => ({
+        group_name: g.name,
+        ratio: g.ratio,
+        models: g.models,
+        description: g.description
+      }));
+      return json(res, 200, { code: 0, data: rates });
+    }
+
     // === Redeem Code Usage ===
     if (p === "/api/v1/redeem" && method === "POST") {
       const auth = requireAuth(req);
