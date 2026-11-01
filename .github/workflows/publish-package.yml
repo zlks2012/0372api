@@ -17,17 +17,34 @@ jobs:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Setup package
+      - name: Prepare package
         run: |
+          mkdir -p dist
+          cp -r server/ dist/server/
+          cp -r public/ dist/public/
+          cp -r src/ dist/src/
+          cp -r scripts/ dist/scripts/
+          cp next.config.ts dist/
+          cp start.ps1 dist/
           node -e "
             const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            pkg.name = '@zlks2012/0372api';
-            pkg.version = '1.0.0';
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+            const pkg = {
+              name: '@zlks2012/0372api',
+              version: '1.0.0',
+              description: 'AI API Gateway - standalone Vue SPA frontend + Node.js backend',
+              main: 'server/index.js',
+              scripts: { start: 'node server/index.js' },
+              keywords: ['ai', 'api', 'gateway'],
+              license: 'MIT',
+              files: ['server/', 'public/', 'src/', 'scripts/', 'next.config.ts', 'start.ps1']
+            };
+            fs.writeFileSync('dist/package.json', JSON.stringify(pkg, null, 2));
+            if (fs.existsSync('README.md')) fs.copyFileSync('README.md', 'dist/README.md');
           "
 
       - name: Publish to GitHub Packages
-        run: npm publish
+        run: |
+          cd dist
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
