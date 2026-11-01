@@ -53,19 +53,44 @@ const PUBLIC_SETTINGS = {
 
 function json(res, status, data) {
   const body = JSON.stringify(data);
-  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" });
+  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" });
   res.end(body);
 }
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
-    req.on("data", (c) => (body += c));
+    let size = 0;
+    req.on("data", (c) => {
+      size += c.length;
+      if (size > 100 * 1024) { // 100KB limit
+        reject(new Error("body too large"));
+        req.destroy();
+        return;
+      }
+      body += c;
+    });
     req.on("end", () => {
-      try { resolve(body ? JSON.parse(body) : {}); } catch { resolve({}); }
+      try { resolve(body ? sanitizeInput(JSON.parse(body)) : {}); } catch { resolve({}); }
     });
     req.on("error", reject);
   });
+}
+
+
+// Input sanitization: strip potentially dangerous characters
+function sanitizeInput(obj) {
+  if (typeof obj === "string") {
+    return obj.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+              .replace(/[<>]/g, "")
+              .trim();
+  }
+  if (typeof obj === "object" && obj !== null) {
+    for (const key of Object.keys(obj)) {
+      obj[key] = sanitizeInput(obj[key]);
+    }
+  }
+  return obj;
 }
 
 function getAuth(req) {
