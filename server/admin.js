@@ -13,8 +13,8 @@ function readBody(req) {
   });
 }
 
-function ok(res, data) { json(res, 200, { code: 0, data, message: "success" }); }
-function list(res, items, total, page, pageSize) { ok(res, { items, total: total ?? items.length, page: page || 1, page_size: pageSize || 20, total_pages: Math.ceil((total ?? items.length) / (pageSize || 20)) }); }
+function ok(res, data) { json(res, 200, data); }
+function list(res, items, total, page, pageSize) { json(res, 200, { items, total: total ?? items.length, page: page || 1, page_size: pageSize || 20, pages: Math.ceil((total ?? items.length) / (pageSize || 20)) }); }
 
 function handleAdmin(req, res, p, method) {
   const url = new URL(req.url, `http://${req.headers.host}`);
