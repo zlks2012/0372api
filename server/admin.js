@@ -222,6 +222,14 @@ function handleAdmin(req, res, p, method) {
     });
   }
 
+  // === Redeem Code Stats ===
+  if (p === "/api/v1/admin/redeem-codes/stats" && method === "GET") {
+    const total = db.redeemCodes ? db.redeemCodes.length : 0;
+    const used = db.redeemCodes ? db.redeemCodes.filter(r => r.status === "used").length : 0;
+    const unused = total - used;
+    return ok(res, { total, used, unused });
+  }
+
   // === Promo Codes ===
   if (!db.promoCodes) db.promoCodes = [];
   if (p === "/api/v1/admin/promo-codes" && method === "GET") return list(res, db.promoCodes);

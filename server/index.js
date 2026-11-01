@@ -1,7 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
-const { load, save, hashPassword, verifyPassword, generateToken, generateApiKey, generateId } = require("./db");
+const { load, save, hashPassword, verifyPassword, generateToken, generateApiKey, generateId, isLockedOut, recordFailedAttempt, clearFailedAttempts, cleanExpiredSessions } = require("./db");
 const { handleAdmin } = require("./admin");
 
 const PORT = 3000;
@@ -144,10 +144,18 @@ const server = http.createServer(async (req, res) => {
 
     if (p === "/api/v1/auth/login" && method === "POST") {
       const body = await readBody(req);
+      const lockKey = (req.socket.remoteAddress || "unknown") + ":" + (body.email || "");
+      if (isLockedOut(lockKey)) {
+        return json(res, 429, { code: 429, message: "too many failed attempts. Try again in 15 minutes." });
+      }
       const db = load();
+      cleanExpiredSessions(db);
       const user = db.users.find((u) => u.email === body.email);
-      if (!user || !verifyPassword(body.password || "", user.password_hash))
+      if (!user || !verifyPassword(body.password || "", user.password_hash)) {
+        recordFailedAttempt(lockKey);
         return json(res, 401, { code: 401, message: "invalid email or password", reason: "INVALID_CREDENTIALS" });
+      }
+      clearFailedAttempts(lockKey);
       const token = generateToken();
       db.sessions[token] = { user_id: user.id, created_at: new Date().toISOString() };
       save(db);
@@ -265,7 +273,27 @@ const server = http.createServer(async (req, res) => {
       return handleAdmin(req, res, p, method);
     }
 
-    // === Placeholder for other authenticated endpoints ===
+    // === Redeem Code Usage ===
+    if (p === "/api/v1/redeem" && method === "POST") {
+      const auth = requireAuth(req);
+      if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
+      const body = await readBody(req);
+      if (!body.code) return json(res, 400, { code: 400, message: "code required" });
+      const db = load();
+      if (!db.redeemCodes) db.redeemCodes = [];
+      const rc = db.redeemCodes.find((r) => r.code === body.code && r.status === "unused");
+      if (!rc) return json(res, 404, { code: 404, message: "invalid or already used code" });
+      rc.status = "used";
+      rc.used_by = auth.user.id;
+      rc.used_at = new Date().toISOString();
+      auth.user.balance += rc.amount;
+      const userIdx = db.users.findIndex((u) => u.id === auth.user.id);
+      if (userIdx >= 0) db.users[userIdx].balance = auth.user.balance;
+      save(db);
+      return json(res, 200, { code: 0, message: "success", data: { amount: rc.amount, new_balance: auth.user.balance } });
+    }
+
+    // === Placeholder for other authenticated endpoints (known routes) ===
     if (p.startsWith("/api/v1/") && !p.startsWith("/api/v1/settings") && !p.startsWith("/api/v1/auth") && !p.startsWith("/api/v1/setup")) {
       const auth = requireAuth(req);
       if (!auth) return json(res, 401, { code: 401, message: "unauthorized" });
